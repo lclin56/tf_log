@@ -1,6 +1,7 @@
 # TF Log
 
 TF Log is a simple logging library in C/C++ for adding log capabilities to your projects.
+[简体中文](doc/README_CN.md)
 
 ## Features
 
