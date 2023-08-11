@@ -15,10 +15,10 @@
 typedef enum
 {
     TF_LOG_LEVEL_CLOSE = 0,
-    TF_LOG_LEVEL_INFO ,
-    TF_LOG_LEVEL_DEBUG ,
-    TF_LOG_LEVEL_WARN ,
-    TF_LOG_LEVEL_ERROR ,
+    TF_LOG_LEVEL_INFO,
+    TF_LOG_LEVEL_DEBUG,
+    TF_LOG_LEVEL_WARN,
+    TF_LOG_LEVEL_ERROR,
 } TF_LOG_LEVEL;
 
 #define TF_LOG_MAX_FILE_SIZE (5 * 1024 * 1024) // 5 MB
@@ -58,16 +58,16 @@ extern pthread_mutex_t log_file_mutex;
             snprintf(full_log_str, sizeof(full_log_str), "[%s %s %s:%d %s] " format "\n", level_str, time_buf, __FILE__, __LINE__, __func__, ##__VA_ARGS__); \
             switch (tf_log_mode)                                                                                                                             \
             {                                                                                                                                                \
-            case TF_LOG_MODE_PRINT:                                                                                                                             \
+            case TF_LOG_MODE_PRINT:                                                                                                                          \
                 fprintf(level == TF_LOG_LEVEL_ERROR ? stderr : stdout, "%s", full_log_str);                                                                  \
                 break;                                                                                                                                       \
-            case TF_LOG_MODE_CALLBACK:                                                                                                                          \
+            case TF_LOG_MODE_CALLBACK:                                                                                                                       \
                 if (tf_log_callback != NULL)                                                                                                                 \
                 {                                                                                                                                            \
                     tf_log_callback(level, full_log_str);                                                                                                    \
                 }                                                                                                                                            \
                 break;                                                                                                                                       \
-            case TF_LOG_MODE_FILE:                                                                                                                              \
+            case TF_LOG_MODE_FILE:                                                                                                                           \
                 if (tf_log_file != NULL)                                                                                                                     \
                 {                                                                                                                                            \
                     if (ftell(tf_log_file) > tf_log_max_file_size)                                                                                           \
@@ -93,15 +93,15 @@ extern pthread_mutex_t log_file_mutex;
         }                                                                                                                                                    \
     } while (0)
 
-#define LOG_INIT()                                              \
-    LOG_CALL_BACK tf_log_callback = NULL;                       \
-    TF_LOG_MODE tf_log_mode = TF_LOG_MODE_PRINT;                      \
-    FILE *tf_log_file = NULL;                                   \
-    int tf_log_level = TF_LOG_LEVEL_INFO;                       \
-    char tf_log_path[1024] = TF_LOG_DEFAULT_PATH;               \
-    char tf_log_filename[256] = TF_LOG_DEFAULT_FILENAME;        \
-    size_t tf_log_max_file_size = TF_LOG_MAX_FILE_SIZE;         \
-    pthread_mutex_t log_file_mutex = PTHREAD_MUTEX_INITIALIZER; 
+#define LOG_INIT()                                       \
+    LOG_CALL_BACK tf_log_callback = NULL;                \
+    TF_LOG_MODE tf_log_mode = TF_LOG_MODE_PRINT;         \
+    FILE *tf_log_file = NULL;                            \
+    int tf_log_level = TF_LOG_LEVEL_INFO;                \
+    char tf_log_path[1024] = TF_LOG_DEFAULT_PATH;        \
+    char tf_log_filename[256] = TF_LOG_DEFAULT_FILENAME; \
+    size_t tf_log_max_file_size = TF_LOG_MAX_FILE_SIZE;  \
+    pthread_mutex_t log_file_mutex = PTHREAD_MUTEX_INITIALIZER;
 #else
 #define LOG_MESSAGE(level, level_str, format, ...)                                                                                                           \
     do                                                                                                                                                       \
@@ -116,16 +116,16 @@ extern pthread_mutex_t log_file_mutex;
             snprintf(full_log_str, sizeof(full_log_str), "[%s %s %s:%d %s] " format "\n", level_str, time_buf, __FILE__, __LINE__, __func__, ##__VA_ARGS__); \
             switch (tf_log_mode)                                                                                                                             \
             {                                                                                                                                                \
-            case TF_LOG_MODE_PRINT:                                                                                                                             \
+            case TF_LOG_MODE_PRINT:                                                                                                                          \
                 fprintf(level == TF_LOG_LEVEL_ERROR ? stderr : stdout, "%s", full_log_str);                                                                  \
                 break;                                                                                                                                       \
-            case TF_LOG_MODE_CALLBACK:                                                                                                                          \
+            case TF_LOG_MODE_CALLBACK:                                                                                                                       \
                 if (tf_log_callback != NULL)                                                                                                                 \
                 {                                                                                                                                            \
                     tf_log_callback(level, full_log_str);                                                                                                    \
                 }                                                                                                                                            \
                 break;                                                                                                                                       \
-            case TF_LOG_MODE_FILE:                                                                                                                              \
+            case TF_LOG_MODE_FILE:                                                                                                                           \
                 if (tf_log_file != NULL)                                                                                                                     \
                 {                                                                                                                                            \
                     if (ftell(tf_log_file) > tf_log_max_file_size)                                                                                           \
@@ -148,7 +148,7 @@ extern pthread_mutex_t log_file_mutex;
 
 #define LOG_INIT()                                       \
     LOG_CALL_BACK tf_log_callback = NULL;                \
-    TF_LOG_MODE tf_log_mode = TF_LOG_MODE_PRINT;               \
+    TF_LOG_MODE tf_log_mode = TF_LOG_MODE_PRINT;         \
     FILE *tf_log_file = NULL;                            \
     int tf_log_level = TF_LOG_LEVEL_INFO;                \
     char tf_log_path[1024] = TF_LOG_DEFAULT_PATH;        \
@@ -165,7 +165,7 @@ extern pthread_mutex_t log_file_mutex;
             tf_log_file = NULL;                                                         \
         }                                                                               \
         tf_log_callback = NULL;                                                         \
-        tf_log_mode = TF_LOG_MODE_PRINT;                                                   \
+        tf_log_mode = TF_LOG_MODE_PRINT;                                                \
         tf_log_level = TF_LOG_LEVEL_INFO;                                               \
         strncpy(tf_log_path, TF_LOG_DEFAULT_PATH, sizeof(tf_log_path) - 1);             \
         strncpy(tf_log_filename, TF_LOG_DEFAULT_FILENAME, sizeof(tf_log_filename) - 1); \
@@ -180,7 +180,7 @@ extern pthread_mutex_t log_file_mutex;
         strncpy(tf_log_path, path, sizeof(tf_log_path) - 1);                             \
         strncpy(tf_log_filename, filename, sizeof(tf_log_filename) - 1);                 \
         tf_log_max_file_size = max_size;                                                 \
-        if (tf_log_mode == TF_LOG_MODE_FILE)                                                \
+        if (tf_log_mode == TF_LOG_MODE_FILE)                                             \
         {                                                                                \
             char filepath[1280];                                                         \
             snprintf(filepath, sizeof(filepath), "%s/%s", tf_log_path, tf_log_filename); \
@@ -200,7 +200,7 @@ extern pthread_mutex_t log_file_mutex;
     do                                                                                   \
     {                                                                                    \
         (tf_log_mode = (mode));                                                          \
-        if (tf_log_mode == TF_LOG_MODE_FILE)                                                \
+        if (tf_log_mode == TF_LOG_MODE_FILE)                                             \
         {                                                                                \
             char filepath[1280];                                                         \
             snprintf(filepath, sizeof(filepath), "%s/%s", tf_log_path, tf_log_filename); \
@@ -214,7 +214,7 @@ extern pthread_mutex_t log_file_mutex;
     do                                                                                   \
     {                                                                                    \
         (strncpy(tf_log_path, (path), sizeof(tf_log_path) - 1));                         \
-        if (tf_log_mode == TF_LOG_MODE_FILE)                                                \
+        if (tf_log_mode == TF_LOG_MODE_FILE)                                             \
         {                                                                                \
             char filepath[1280];                                                         \
             snprintf(filepath, sizeof(filepath), "%s/%s", tf_log_path, tf_log_filename); \
@@ -228,7 +228,7 @@ extern pthread_mutex_t log_file_mutex;
     do                                                                                   \
     {                                                                                    \
         (strncpy(tf_log_filename, (filename), sizeof(tf_log_filename) - 1));             \
-        if (tf_log_mode == TF_LOG_MODE_FILE)                                                \
+        if (tf_log_mode == TF_LOG_MODE_FILE)                                             \
         {                                                                                \
             char filepath[1280];                                                         \
             snprintf(filepath, sizeof(filepath), "%s/%s", tf_log_path, tf_log_filename); \
@@ -253,6 +253,8 @@ extern pthread_mutex_t log_file_mutex;
     } while (0)
 
 #define LOG_SET_MAX_SIZE(max_size) (tf_log_max_file_size = (max_size))
+
+#define LOG_SET_CALL_BACK(call_back) (tf_log_callback = (call_back))
 
 #define LOG_INFO(format, ...) LOG_MESSAGE(TF_LOG_LEVEL_INFO, "INFO", format, ##__VA_ARGS__)
 #define LOG_DEBUG(format, ...) LOG_MESSAGE(TF_LOG_LEVEL_DEBUG, "DEBUG", format, ##__VA_ARGS__)

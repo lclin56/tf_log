@@ -57,6 +57,7 @@ You can configure the logger's behavior using the following macros:
 - `LOG_SET_PATH(path)`: Set the path for log files.
 - `LOG_SET_FILENAME(filename)`: Set the log filename.
 - `LOG_SET_MAX_SIZE(max_size)`: Set the maximum log file size.
+- `LOG_SET_CALL_BACK(call_back)`: Set the callback function.
 
 ## Contributing
 

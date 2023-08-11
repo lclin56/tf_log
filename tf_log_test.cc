@@ -1,6 +1,9 @@
 #include "tf_log.h"
-#include <pthread.h>
 #include <stdlib.h>
+
+#ifdef _REENTRANT
+#include <pthread.h>
+#endif
 
 LOG_INIT(); // Initialize the logger
 
@@ -10,6 +13,7 @@ int log_callback(int level, const char *log_str)
     return 0;
 }
 
+#ifdef _REENTRANT
 void* log_thread(void* arg)
 {
     int thread_num = *((int*) arg);
@@ -22,16 +26,41 @@ void* log_thread(void* arg)
     }
     return NULL;
 }
+#endif
 
 #define NUM_THREADS 4
 
 int main()
 {
-    // Configure the logger settings
+    // Configure the logger level
     LOG_SET_LEVEL(TF_LOG_LEVEL_WARN);
-    LOG_SET_MODE(TF_LOG_MODE_FILE);
-    LOG_SET_MAX_SIZE(1 * 1024 * 1024);
 
+    // Configure the logger mode
+    LOG_SET_MODE(TF_LOG_MODE_PRINT);
+    LOG_INFO("This is an INFO message.");
+    LOG_DEBUG("This is a DEBUG message.");
+    LOG_WARN("This is a WARN message.");
+    LOG_ERROR("This is an ERROR message.");
+
+    // Configure the logger mode
+    LOG_SET_MODE(TF_LOG_MODE_CALLBACK);
+    LOG_SET_CALL_BACK(log_callback);
+    LOG_INFO("This is an INFO message.");
+    LOG_DEBUG("This is a DEBUG message.");
+    LOG_WARN("This is a WARN message.");
+    LOG_ERROR("This is an ERROR message.");
+
+    // Configure the logger mode
+    LOG_SET_MODE(TF_LOG_MODE_FILE);
+    // LOG_SET_PATH("./"); // You can use the default configuration.
+    // LOG_SET_FILENAME("tf_message"); // You can use the default configuration.
+    // LOG_SET_MAX_SIZE(1 * 1024 * 1024); // You can use the default configuration.
+    LOG_INFO("This is an INFO message.");
+    LOG_DEBUG("This is a DEBUG message.");
+    LOG_WARN("This is a WARN message.");
+    LOG_ERROR("This is an ERROR message.");
+
+#ifdef _REENTRANT
     pthread_t threads[NUM_THREADS];
     int thread_args[NUM_THREADS];
 
@@ -45,6 +74,7 @@ int main()
     for (int i = 0; i < NUM_THREADS; i++) {
         pthread_join(threads[i], NULL);
     }
+#endif
 
     return 0;
 }
