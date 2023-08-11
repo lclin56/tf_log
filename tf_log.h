@@ -95,7 +95,11 @@ extern pthread_mutex_t log_file_mutex; // Mutex for thread safety
                         }                                                                   \
                         pthread_mutex_unlock(&log_file_mutex);                              \
                     }                                                                       \
-                    fprintf(tf_log_file, "%s", full_log_str);                               \
+                    if (tf_log_file)                                                        \
+                    {                                                                       \
+                        fprintf(tf_log_file, "%s", full_log_str);                           \
+                        fflush(tf_log_file);                                                \
+                    }                                                                       \
                 }                                                                           \
                 break;                                                                      \
             }                                                                               \
